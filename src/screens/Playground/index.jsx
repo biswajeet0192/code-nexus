@@ -38,7 +38,6 @@ const Playground = () => {
   const [currentOutput, setCurrentOutput] = useState('')
   const [isFullScreen, setIsFullScreen] = useState(false)
 
-  // all logic of the playground
   const saveCode = () => {
     savePlayground(folderId, playgroundId, currentCode, currentLanguage)
   }
@@ -74,7 +73,6 @@ const Playground = () => {
   }
 
   const getOutput = async (token) => {
-    // we will make api call here
     const options = {
       method: 'GET',
       url: "https://judge0-ce.p.rapidapi.com/submissions/" + token,
@@ -85,7 +83,6 @@ const Playground = () => {
       }
     };
 
-    // call the api
     const res = await axios.request(options);
     if (res.data.status_id <= 2) {
       const res2 = await getOutput(token);
@@ -107,10 +104,8 @@ const Playground = () => {
     const source_code = encode(currentCode);
     const stdin = encode(currentInput);
 
-    // pass these things to Create Submissions
     const token = await postSubmission(language_id, source_code, stdin);
 
-    // get the output
     const res = await getOutput(token);
     const status_name = res.status.description;
     const decoded_output = decode(res.stdout ? res.stdout : '');
@@ -119,7 +114,6 @@ const Playground = () => {
 
     let final_output = '';
     if (res.status_id !== 3) {
-      // our code have some error
       if (decoded_compile_output === "") {
         final_output = decoded_error;
       }
